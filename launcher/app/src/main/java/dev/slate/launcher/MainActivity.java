@@ -40,7 +40,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -53,9 +52,6 @@ public class MainActivity extends Activity implements AppAdapter.Listener {
 
     private static final String PREFS = "slate";
     private static final String KEY_DOCK = "dock";
-    private static final String DEFAULT_DOCK =
-            "com.android.chrome,com.google.android.youtube,com.google.android.apps.photos,com.google.android.gm";
-    private static final int MAX_DOCK = 6;
     private static final String[] WALLPAPER_NAMES = {"wallpaper.jpg", "wallpaper.png"};
 
     private final ExecutorService loader = Executors.newSingleThreadExecutor();
@@ -242,7 +238,7 @@ public class MainActivity extends Activity implements AppAdapter.Listener {
         int index = docked.indexOf(app.pkg());
         PopupMenu menu = new PopupMenu(this, anchor);
         if (index < 0) {
-            menu.getMenu().add(0, 1, 0, "Add to dock").setEnabled(docked.size() < MAX_DOCK);
+            menu.getMenu().add(0, 1, 0, "Add to dock").setEnabled(docked.size() < DockOrder.MAX);
         } else {
             menu.getMenu().add(0, 2, 0, "Remove from dock");
             if (index > 0) {
@@ -259,16 +255,16 @@ public class MainActivity extends Activity implements AppAdapter.Listener {
         menu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case 1:
-                    docked.add(app.pkg());
+                    DockOrder.add(docked, app.pkg());
                     break;
                 case 2:
                     docked.remove(index);
                     break;
                 case 3:
-                    docked.add(index - 1, docked.remove(index));
+                    DockOrder.move(docked, index, -1);
                     break;
                 case 4:
-                    docked.add(index + 1, docked.remove(index));
+                    DockOrder.move(docked, index, 1);
                     break;
                 case 5:
                     startSafely(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -280,7 +276,7 @@ public class MainActivity extends Activity implements AppAdapter.Listener {
                 default:
                     return false;
             }
-            prefs.edit().putString(KEY_DOCK, String.join(",", docked)).apply();
+            prefs.edit().putString(KEY_DOCK, DockOrder.join(docked)).apply();
             renderDock();
             return true;
         });
@@ -290,14 +286,7 @@ public class MainActivity extends Activity implements AppAdapter.Listener {
     // ---- dock ----
 
     private List<String> dockPackages() {
-        String raw = prefs.getString(KEY_DOCK, DEFAULT_DOCK);
-        List<String> out = new ArrayList<>();
-        for (String p : Arrays.asList(raw.split(","))) {
-            if (!p.trim().isEmpty()) {
-                out.add(p.trim());
-            }
-        }
-        return out;
+        return DockOrder.parse(prefs.getString(KEY_DOCK, getString(R.string.default_dock)));
     }
 
     private void renderDock() {

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dock on first start, left to right (package names, max 6). Missing apps are skipped.
+         After first start the dock is edited on the device: long-press an app. -->
+    <string name="default_dock" translatable="false">com.android.chrome,com.google.android.youtube,com.google.android.apps.photos,com.google.android.gm</string>
+</resources>
