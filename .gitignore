@@ -1,0 +1,22 @@
+# Per-device state written by tools/ (package lists, settings dumps). Never commit these:
+# they contain your installed apps and network settings.
+backup/
+state/
+*.png.tmp
+
+# Android / Gradle
+launcher/.gradle/
+launcher/build/
+launcher/app/build/
+launcher/local.properties
+*.apk
+*.aab
+
+# Local toolchains
+.tools/
+
+# OS / editor
+.DS_Store
+.idea/
+*.iml
+.vscode/
