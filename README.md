@@ -1,5 +1,8 @@
 # Clean Your Android
 
+[![CI](https://github.com/Bhargi777/cleanyourandroid/actions/workflows/ci.yml/badge.svg)](https://github.com/Bhargi777/cleanyourandroid/actions/workflows/ci.yml)
+[![MIT](https://img.shields.io/badge/licence-MIT-informational)](LICENSE)
+
 **Debloat any Android phone or tablet over ADB, and swap the cluttered home screen for a clean,
 iPadOS-style launcher. No root, nothing uninstalled, one command to undo.**
 
