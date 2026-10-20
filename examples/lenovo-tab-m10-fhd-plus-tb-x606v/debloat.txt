@@ -1,0 +1,62 @@
+# Lenovo Tab M10 FHD Plus LTE (TB-X606V, codename X606V, MediaTek), Android 10 (SDK 29), 4 GB RAM.
+# Build TB-X606V_S300665_220630_BMP. Validated 2026-10-20 over USB.
+#
+# Apply:   tools/disable.sh examples/lenovo-tab-m10-fhd-plus-tb-x606v/debloat.txt
+# Undo:    tools/restore.sh
+# Everything is DISABLED, not uninstalled. Comment out any line you want to keep.
+#
+# Stock launcher: com.tblenovo.launcher (SearchLauncher). HOME claimants on stock: tblenovo.launcher and
+# com.android.settings/.FallbackHome. Recents is com.tblenovo.launcher/com.android.quickstep.RecentsActivity,
+# so the stock launcher stays enabled even after Slate Home takes Home (disable.sh skips it anyway).
+#
+# Tested: disabled in five batches with a screenshot after each, Home, Settings, YouTube and Chrome
+# checked between batches; Slate Home installed from launcher/ and owns Home.
+#
+# Notes from this tablet:
+# - Gesture navigation only works with the stock launcher on Android 10; Android switches to 3-button
+#   navigation when another launcher owns Home.
+# - The USB port dropped the connection several times; each reconnect showed the device as
+#   "unauthorized" until "Always allow from this computer" was ticked.
+# - The screen sleeps during long runs and screenshots come back blank; tools/screenshot.sh wakes it.
+#
+# Kept on purpose: Lenovo ID + system updates (com.lenovo.lsf, com.lenovo.ota), face unlock
+# (com.tbsmart.levision: FxServiceAuth/FxServiceEnroll), Lenovo screen assistant (unclear, left alone),
+# Dolby Atmos (com.dolby.daxservice, daxappui), all com.mediatek.* telephony and camera packages,
+# Play Store / Play Services, Gboard, Chrome, YouTube, Gmail, Drive, Photos, Calendar, Maps.
+
+# Lenovo telemetry and push
+com.lenovo.ue.device                   # user-experience telemetry (BootReceiver, SwitchUEReceiver)
+com.lmsa.app.lmsapad                   # Lenovo Moto Smart Assistant helper, Firebase analytics
+com.lenovo.lsf.device                  # Lenovo push receiver
+com.lenovo.tbengine                    # tips and promo pushes via Firebase messaging
+com.debug.loggerui                     # MediaTek debug logger UI
+
+# Lenovo content feed, app auto-installers and retail demo
+com.tblenovo.center                    # "Smart engine" content feed and home widget
+com.lenovo.dsa                         # OCZ deploy service, installs partner apps
+com.lenovo.ocpl                        # OCZ client downloader, installs partner apps
+com.lenovo.smart_tab_m10_fhd           # retail demo app (Epos)
+com.motorola.demo                      # store demo mode (can trigger a factory reset)
+
+# Lenovo extras (off by choice)
+com.tblenovo.kidslauncher              # Kids Space
+com.lenovo.screencapture               # Lenovo screen recorder
+com.tblenovo.soundrecorder             # Lenovo sound recorder
+com.tblenovo.wallpaper                 # stock wallpaper pack (current wallpaper was static, unaffected)
+
+# Preloaded apps (off by choice)
+com.king.candycrushsaga
+cn.sinoangel.monsterclass              # Monster Class (kids)
+cn.sinoangel.color                     # Monster Color (kids)
+cn.sinoangel.kidcamera                 # Monster Camera (kids)
+com.microsoft.bing.wallpapers
+com.google.android.apps.tachyon        # Duo
+com.google.android.videos              # Play Movies
+com.google.android.apps.youtube.music
+
+# Google apps (off by choice; no SIM in use)
+com.google.android.dialer              # Phone: also removes the emergency-call dialer
+com.google.android.apps.messaging      # Messages
+com.google.android.apps.googleassistant
+com.google.android.googlequicksearchbox  # Google app; breaks the stock launcher's search bar
+com.google.android.projection.gearhead # Android Auto stub
