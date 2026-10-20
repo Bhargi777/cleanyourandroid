@@ -42,6 +42,24 @@ class ReadListTest(unittest.TestCase):
                 self.assertEqual(r.stdout, "", "a refused list must print no packages")
 
 
+class ArgumentValidationTest(unittest.TestCase):
+    def test_screenshot_name_rejects_newlines_and_paths(self):
+        for bad in ("ok\nrm -rf /", "../escape", "a b", "$(reboot)"):
+            with self.subTest(name=bad):
+                r = subprocess.run([str(TOOLS / "screenshot.sh"), bad], cwd=ROOT,
+                                   capture_output=True, text=True)
+                self.assertNotEqual(r.returncode, 0)
+                self.assertIn("name may only use", r.stderr)
+
+    def test_no_pipes_into_grep_q(self):
+        # With pipefail, an early-exiting `grep -q` can SIGPIPE the writer and turn a match into a
+        # failure, which made safety checks fail open. Use here-strings or [[ =~ ]] instead.
+        for path in TOOLS.glob("*.sh"):
+            with self.subTest(script=path.name):
+                for n, line in enumerate(path.read_text(encoding="utf-8").split("\n"), 1):
+                    self.assertNotRegex(line, r"\|\s*grep\s+-[A-Za-z]*q", f"line {n}: {line.strip()}")
+
+
 class ScriptHygieneTest(unittest.TestCase):
     def scripts(self):
         return sorted(TOOLS.glob("*.sh")) + [ROOT / "launcher" / "build-and-install.sh"]
