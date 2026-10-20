@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="text_primary">#F5F5F7</color>
+    <color name="text_secondary">#A1A1A6</color>
+    <!-- Glass surfaces: white at low alpha over pitch black. No blur (RAM/GPU budget). -->
+    <color name="glass_fill">#1FFFFFFF</color>
+    <color name="glass_stroke">#26FFFFFF</color>
+    <color name="dock_fill">#17FFFFFF</color>
+</resources>
