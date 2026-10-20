@@ -1,0 +1,30 @@
+name: Device list
+description: Share a tested debloat list for a phone or tablet
+labels: [device-list]
+body:
+  - type: input
+    id: device
+    attributes:
+      label: Device and model number
+      placeholder: e.g. Samsung Galaxy Tab A8 (SM-X200)
+    validations:
+      required: true
+  - type: input
+    id: android
+    attributes:
+      label: Android version, skin and build number
+      placeholder: e.g. Android 14, One UI 6.1, X200XXS4CXD1
+    validations:
+      required: true
+  - type: textarea
+    id: list
+    attributes:
+      label: debloat.txt
+      description: Packages you disabled and lived with, one per line with a short comment.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: What you kept on purpose, and anything that broke
