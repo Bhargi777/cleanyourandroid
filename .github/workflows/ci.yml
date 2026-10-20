@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lists-and-tools:
+    name: Lists and tools
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: ShellCheck
+        run: shellcheck -x -s bash tools/*.sh launcher/build-and-install.sh
+      - name: Example lists and tool tests
+        run: python3 -m unittest discover -s tests -v
+
+  launcher:
+    name: Launcher build and unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platforms;android-35 build-tools;35.0.0
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Unit tests and debug build
+        working-directory: launcher
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon testDebugUnitTest assembleDebug
+      - name: Keep the launcher small
+        run: |
+          size=$(stat -c %s launcher/app/build/outputs/apk/debug/app-debug.apk)
+          echo "debug APK: $((size / 1024)) KB"
+          test "$size" -lt 6291456 || { echo "debug APK is over 6 MB; keep the launcher light"; exit 1; }
