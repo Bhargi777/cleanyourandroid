@@ -12,12 +12,16 @@ set -euo pipefail
 . "$(dirname "$0")/lib.sh"
 require_device
 
-resolves() { ash ping -c 1 -W 3 "$1" 2>&1 | grep -q '^PING'; }
+resolves() {
+  local out
+  out="$(ash ping -c 1 -W 3 "$1" 2>&1 || true)"
+  grep -q '^PING' <<< "$out"
+}
 
 case "${1:-status}" in
   on)
     host="${2:-dns.adguard-dns.com}"
-    printf '%s' "$host" | grep -qE '^[A-Za-z0-9.-]+$' || die "bad hostname: $host"
+    [[ $host =~ ^[A-Za-z0-9.-]+$ ]] || die "bad hostname: $host"
     ash settings put global private_dns_specifier "$host"
     ash settings put global private_dns_mode hostname
     ok=""

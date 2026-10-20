@@ -7,14 +7,16 @@ set -euo pipefail
 # shellcheck source=tools/lib.sh
 . "$(dirname "$0")/lib.sh"
 name="${1:-shot-$(date +%H%M%S)}"
-printf '%s' "$name" | grep -qE '^[A-Za-z0-9._-]+$' || die "name may only use letters, digits, . _ -"
+[[ $name =~ ^[A-Za-z0-9._-]+$ ]] || die "name may only use letters, digits, . _ -"
 require_device
 
-if ash dumpsys power | grep -q 'mWakefulness=Asleep\|mWakefulness=Dozing'; then
+power="$(ash dumpsys power)"
+if grep -q 'mWakefulness=Asleep\|mWakefulness=Dozing' <<< "$power"; then
   adb shell input keyevent KEYCODE_WAKEUP
   sleep 1
 fi
-if ash dumpsys window | grep -q 'isStatusBarKeyguard=true\|mShowingLockscreen=true'; then
+window="$(ash dumpsys window)"
+if grep -q 'isStatusBarKeyguard=true\|mShowingLockscreen=true' <<< "$window"; then
   note "the lock screen is showing; unlock the device or the screenshot shows only the lock screen"
 fi
 

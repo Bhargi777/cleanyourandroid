@@ -37,7 +37,7 @@ protected="$(protected_packages)"
 
 todo=()
 while read -r p; do
-  if printf '%s\n' "$protected" | grep -qxF "$p"; then
+  if grep -qxF "$p" <<< "$protected"; then
     note "skip $p: protected (the device needs it to boot, unlock, type or install)"; continue
   fi
   if [ "$p" = "$ime_pkg" ]; then
@@ -49,10 +49,10 @@ while read -r p; do
   if [ -n "$recents_pkg" ] && [ "$p" = "$recents_pkg" ] && [ -z "${FORCE_RECENTS:-}" ]; then
     note "skip $p: it provides the Recents screen; disabling it breaks app switching (FORCE_RECENTS=1)"; continue
   fi
-  if ! printf '%s\n' "$installed" | grep -qxF "$p"; then
+  if ! grep -qxF "$p" <<< "$installed"; then
     note "skip $p: not installed on this device"; continue
   fi
-  if printf '%s\n' "$disabled_now" | grep -qxF "$p"; then
+  if grep -qxF "$p" <<< "$disabled_now"; then
     note "skip $p: already disabled"; continue
   fi
   todo+=("$p")

@@ -17,7 +17,7 @@ if [ -z "$arg" ]; then
   pkgs="$(cat "$sd/disabled.txt")"
 elif [ -f "$arg" ]; then
   pkgs="$(read_list "$arg")"
-elif printf '%s\n' "$arg" | grep -qE "$PACKAGE_RE"; then
+elif [[ $arg =~ $PACKAGE_RE ]]; then
   pkgs="$arg"
 else
   die "not a list file or package name: $arg"
@@ -27,7 +27,7 @@ pre=""
 [ -f "$sd/pre-disabled.txt" ] && pre="$(cat "$sd/pre-disabled.txt")"
 while read -r p; do
   [ -n "$p" ] || continue
-  if printf '%s\n' "$pre" | grep -qxF "$p"; then
+  if grep -qxF "$p" <<< "$pre"; then
     echo "leave $p: it was disabled before tools/disable.sh ran"; continue
   fi
   out="$(ash pm enable --user 0 "$p" 2>&1 || true)"
