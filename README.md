@@ -17,10 +17,6 @@ installers, demo modes and preloaded games. This repo gives a coding assistant (
 Gemini CLI, ...) everything it needs to find that junk on *your* device, ask you about anything you
 might use, switch it off in small verified batches, and install a light home screen.
 
-Inspired by [CleanYourTV](https://github.com/Gathin23/cleanyourtv), which does the same for Android
-TVs. This is the phone and tablet take: touch instead of a D-pad, Recents and gesture navigation
-instead of HDMI inputs.
-
 ## How it works
 
 1. **Back up**: package lists, disabled packages, getprop, every settings table, the Home owner and
@@ -114,3 +110,9 @@ them: they list your installed apps and settings.
 ## Licence
 
 MIT. Outfit is under the SIL Open Font License (`launcher/app/src/main/assets/fonts/OFL.txt`).
+
+## Credits
+
+Inspired by [CleanYourTV](https://github.com/Gathin23/cleanyourtv/tree/main), this project brings
+the idea to Android phones and tablets: touch instead of a D-pad, and Recents and gesture
+navigation instead of HDMI inputs.
